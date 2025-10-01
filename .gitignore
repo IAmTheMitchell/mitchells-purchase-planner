@@ -11,6 +11,13 @@ vite.config.d.ts
 vitest.config.js
 vitest.config.d.ts
 
+# npm cache artifacts
+.npm/
+.npm-cache/
+npm-cache/
+npm-packages/
+# keep package.json and package-lock.json tracked for installs
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
