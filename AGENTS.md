@@ -4,7 +4,7 @@
 - `src/App.tsx` orchestrates the planner UI; `mpp.jsx` simply re-exports it for consumers expecting the legacy entry point.
 - Pure logic lives in `src/calculations/` (property & vehicle math) and `src/utils/` (amortization + currency helpers). Update or add functions there rather than inside components.
 - UI primitives are under `src/components/`, grouped by responsibility (inputs, layout cards, scenario widgets). Keep new components co-located and export them through the folder when they are reused.
-- Factories and persistence helpers sit in `src/defaults.ts` and `src/persistence.ts`. Bump the `future-purchase-planner.scenarios.v1` key suffix and add migrations when the stored shape changes.
+- Factories and persistence helpers sit in `src/defaults.ts` and `src/persistence.ts`. Bump the `mitchells-purchase-planner.scenarios.v1` key suffix and add migrations when the stored shape changes.
 
 ## Build, Test, and Development Commands
 - `npm install` pulls both runtime and dev dependencies (Vite, Vitest, React, etc.).

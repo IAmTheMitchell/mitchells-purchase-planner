@@ -1,4 +1,4 @@
-# Future Purchase Cost Planner
+# Mitchell's Purchase Planner
 
 Interactive finance sandbox for comparing long-term housing and vehicle purchases. Model monthly costs, upfront fees, and multi-year outlays across saved scenarios directly in a modular React UI.
 
@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Vite will print a local URL—open it in your browser to explore the planner. The app stores scenarios in `localStorage` using the key `future-purchase-planner.scenarios.v1`; clearing that key resets saved data.
+Vite will print a local URL—open it in your browser to explore the planner. The app stores scenarios in `localStorage` using the key `mitchells-purchase-planner.scenarios.v1`; clearing that key resets saved data.
 
 ## Available Scripts
 

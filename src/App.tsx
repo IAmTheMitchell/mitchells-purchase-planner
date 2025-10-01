@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
-import { Copy, FilePlus2, FolderOpen, Layers, Plus, Trash2, Calculator as CalculatorIcon } from "lucide-react";
+import {
+  Copy,
+  FilePlus2,
+  FolderOpen,
+  Layers,
+  Plus,
+  Trash2,
+  Calculator as CalculatorIcon,
+} from "lucide-react";
 
 import { ItemEditor } from "./components/ItemEditor";
 import { ItemSummary } from "./components/ItemSummary";
@@ -23,8 +31,12 @@ export default function App() {
   const initialScenarios = initialScenariosRef.current as Scenario[];
 
   const [scenarios, setScenarios] = useState<Scenario[]>(initialScenarios);
-  const [currentId, setCurrentId] = useState<string>(initialScenarios[0]?.id ?? "");
-  const [editingItem, setEditingItem] = useState<PropertyItem | VehicleItem | null>(null);
+  const [currentId, setCurrentId] = useState<string>(
+    initialScenarios[0]?.id ?? "",
+  );
+  const [editingItem, setEditingItem] = useState<
+    PropertyItem | VehicleItem | null
+  >(null);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState<boolean>(isBrowser);
 
@@ -33,7 +45,9 @@ export default function App() {
       const loaded = loadScenarios();
       setScenarios(loaded);
       setCurrentId(loaded[0]?.id ?? "");
-      setCompareIds((prev) => prev.filter((id) => loaded.some((scenario) => scenario.id === id)));
+      setCompareIds((prev) =>
+        prev.filter((id) => loaded.some((scenario) => scenario.id === id)),
+      );
       setHydrated(true);
       return;
     }
@@ -42,7 +56,8 @@ export default function App() {
   }, [hydrated, scenarios]);
 
   const current = useMemo(
-    () => scenarios.find((scenario) => scenario.id === currentId) ?? scenarios[0],
+    () =>
+      scenarios.find((scenario) => scenario.id === currentId) ?? scenarios[0],
     [scenarios, currentId],
   );
 
@@ -54,19 +69,30 @@ export default function App() {
 
   function updateCurrent(updater: (scenario: Scenario) => Scenario) {
     if (!current) return;
-    setScenarios((prev) => prev.map((scenario) => (scenario.id === current.id ? updater({ ...scenario }) : scenario)));
+    setScenarios((prev) =>
+      prev.map((scenario) =>
+        scenario.id === current.id ? updater({ ...scenario }) : scenario,
+      ),
+    );
   }
 
   function addItem(type: ItemType) {
     const item = type === "property" ? newProperty() : newVehicle();
-    updateCurrent((scenario) => ({ ...scenario, items: [...scenario.items, item] }));
+    updateCurrent((scenario) => ({
+      ...scenario,
+      items: [...scenario.items, item],
+    }));
     setEditingItem(item);
   }
 
   function duplicateScenario(id: string) {
     const source = scenarios.find((scenario) => scenario.id === id);
     if (!source) return;
-    const copy: Scenario = { ...source, id: uuidv4(), name: `${source.name} (copy)` };
+    const copy: Scenario = {
+      ...source,
+      id: uuidv4(),
+      name: `${source.name} (copy)`,
+    };
     setScenarios((prev) => [...prev, copy]);
     setCurrentId(copy.id);
   }
@@ -104,9 +130,12 @@ export default function App() {
               <CalculatorIcon className="w-6 h-6" />
             </motion.div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Future Purchase Cost Planner</h1>
+              <h1 className="text-2xl md:text-3xl font-bold">
+                Mitchell's Purchase Planner
+              </h1>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                Model properties & vehicles, save scenarios, and compare side by side.
+                Model properties & vehicles, save scenarios, and compare side by
+                side.
               </p>
             </div>
           </div>
@@ -159,7 +188,14 @@ export default function App() {
                 className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
                 multiple
                 value={compareIds}
-                onChange={(e) => setCompareIds(Array.from(e.target.selectedOptions, (option) => option.value))}
+                onChange={(e) =>
+                  setCompareIds(
+                    Array.from(
+                      e.target.selectedOptions,
+                      (option) => option.value,
+                    ),
+                  )
+                }
               >
                 {scenarios.map((scenario) => (
                   <option key={scenario.id} value={scenario.id}>
@@ -179,9 +215,14 @@ export default function App() {
         <SectionCard title="Scenario" icon={<FolderOpen className="w-4 h-4" />}>
           <ScenarioHeader
             scenario={current}
-            onRename={(name) => updateCurrent((scenario) => ({ ...scenario, name }))}
+            onRename={(name) =>
+              updateCurrent((scenario) => ({ ...scenario, name }))
+            }
             onAnalysisYears={(years) =>
-              updateCurrent((scenario) => ({ ...scenario, analysisYears: Math.max(1, years) }))
+              updateCurrent((scenario) => ({
+                ...scenario,
+                analysisYears: Math.max(1, years),
+              }))
             }
           />
 
@@ -193,14 +234,19 @@ export default function App() {
               >
                 <Plus className="inline w-4 h-4 mr-1" /> Add property
               </button>
-              <button className="px-3 py-2 rounded-xl bg-black text-white" onClick={() => addItem("vehicle")}>
+              <button
+                className="px-3 py-2 rounded-xl bg-black text-white"
+                onClick={() => addItem("vehicle")}
+              >
                 <Plus className="inline w-4 h-4 mr-1" /> Add vehicle
               </button>
             </div>
           </div>
 
           {current.items.length === 0 ? (
-            <div className="text-sm text-neutral-600">No items yet. Add a property or vehicle to begin.</div>
+            <div className="text-sm text-neutral-600">
+              No items yet. Add a property or vehicle to begin.
+            </div>
           ) : (
             <div className="grid grid-cols-1 gap-4">
               {current.items.map((item) => (
@@ -212,7 +258,9 @@ export default function App() {
                   onDelete={() =>
                     updateCurrent((scenario) => ({
                       ...scenario,
-                      items: scenario.items.filter((existing) => existing.id !== item.id),
+                      items: scenario.items.filter(
+                        (existing) => existing.id !== item.id,
+                      ),
                     }))
                   }
                 />
@@ -227,10 +275,13 @@ export default function App() {
 
         <footer className="mt-10 text-xs text-neutral-500">
           <p>
-            Notes: Property monthly totals include mortgage payment, PMI (until cancellation), taxes, insurance, HOA, and
-            maintenance. Upfront totals include down payment, closing costs (percent + fixed), points, origination, minus
-            lender credits. Vehicle monthly totals include loan payment, insurance, registration (prorated monthly), and
-            maintenance. Upfront totals include down payment, fees, and tax if not rolled into the loan.
+            Notes: Property monthly totals include mortgage payment, PMI (until
+            cancellation), taxes, insurance, HOA, and maintenance. Upfront
+            totals include down payment, closing costs (percent + fixed),
+            points, origination, minus lender credits. Vehicle monthly totals
+            include loan payment, insurance, registration (prorated monthly),
+            and maintenance. Upfront totals include down payment, fees, and tax
+            if not rolled into the loan.
           </p>
         </footer>
       </div>
@@ -242,7 +293,9 @@ export default function App() {
             onSave={(updated) => {
               updateCurrent((scenario) => ({
                 ...scenario,
-                items: scenario.items.map((existing) => (existing.id === updated.id ? updated : existing)),
+                items: scenario.items.map((existing) =>
+                  existing.id === updated.id ? updated : existing,
+                ),
               }));
               setEditingItem(null);
             }}
