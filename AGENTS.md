@@ -7,11 +7,12 @@
 - Factories and persistence helpers sit in `src/defaults.ts` and `src/persistence.ts`. Bump the `future-purchase-planner.scenarios.v1` key suffix and add migrations when the stored shape changes.
 
 ## Build, Test, and Development Commands
-- This repo ships only the React module; embed it in your chosen host (Vite, Next.js, etc.). Baseline setup:
-  - `npm install react react-dom framer-motion lucide-react uuid`
-  - `npm install -D typescript @types/react @types/react-dom vite`
-  - `npm run dev` (Vite default) after wiring `App` into the host entrypoint.
-- Mirror the host project’s scripts and document any additional commands you introduce in this file.
+- `npm install` pulls both runtime and dev dependencies (Vite, Vitest, React, etc.).
+- `npm run dev` launches the Vite dev server with fast refresh at the printed localhost URL.
+- `npm run build` type-checks and outputs a production bundle under `dist/`.
+- `npm run preview` serves the production bundle locally for smoke testing.
+- `npm run test` runs the Vitest suite in jsdom with Testing Library helpers.
+  - Add new specs alongside the modules they cover (`*.test.ts(x)`), and ensure tests stub `localStorage` when persisting scenarios.
 
 ## Coding Style & Naming Conventions
 - Use 2-space indentation, semicolons, and double quotes across `src/**/*`. Run `npx prettier --write "src/**/*.{ts,tsx}" mpp.jsx` before submitting.
