@@ -3,11 +3,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
 import {
   Copy,
+  Download,
   FilePlus2,
   FolderOpen,
   Layers,
   Plus,
   Trash2,
+  Upload,
   Calculator as CalculatorIcon,
 } from "lucide-react";
 
@@ -17,7 +19,12 @@ import { ScenarioHeader } from "./components/ScenarioHeader";
 import { ComparePanel } from "./components/ComparePanel";
 import { SectionCard } from "./components/SectionCard";
 import { newProperty, newScenario, newVehicle } from "./defaults";
-import { loadScenarios, saveScenarios } from "./persistence";
+import {
+  loadScenarios,
+  parseScenarios,
+  saveScenarios,
+  serializeScenarios,
+} from "./persistence";
 import { ItemType, PropertyItem, Scenario, VehicleItem } from "./types";
 
 export default function App() {
@@ -39,6 +46,7 @@ export default function App() {
   >(null);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState<boolean>(isBrowser);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!hydrated) {
@@ -115,6 +123,55 @@ export default function App() {
     setCompareIds((prev) => prev.filter((compareId) => compareId !== id));
   }
 
+  function handleExport() {
+    if (!isBrowser || scenarios.length === 0) return;
+
+    try {
+      const payload = serializeScenarios(scenarios);
+      const blob = new Blob([payload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `purchase-planner-export-${timestamp}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+    } catch (error) {
+      if (isBrowser) {
+        const message =
+          error instanceof Error ? error.message : "Unknown export error";
+        window.alert(`Export failed: ${message}`);
+      }
+    }
+  }
+
+  async function handleImport(files: FileList | null) {
+    if (!files?.length) return;
+
+    const [file] = files;
+    try {
+      const text = await file.text();
+      const imported = parseScenarios(text);
+      setScenarios(imported);
+      setCurrentId(imported[0].id);
+      setCompareIds((prev) =>
+        prev.filter((id) => imported.some((scenario) => scenario.id === id)),
+      );
+    } catch (error) {
+      if (isBrowser) {
+        const message =
+          error instanceof Error ? error.message : "Unknown import error";
+        window.alert(`Import failed: ${message}`);
+      }
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }
+
   if (!current) return null;
 
   return (
@@ -158,11 +215,32 @@ export default function App() {
               <Copy className="inline w-4 h-4 mr-1" /> Duplicate
             </button>
             <button
+              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
+              onClick={handleExport}
+            >
+              <Download className="inline w-4 h-4 mr-1" /> Export all
+            </button>
+            <button
+              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="inline w-4 h-4 mr-1" /> Import
+            </button>
+            <button
               className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-red-600"
               onClick={() => removeScenario(current.id)}
             >
               <Trash2 className="inline w-4 h-4 mr-1" /> Delete
             </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={(event) => {
+                void handleImport(event.target.files);
+              }}
+            />
           </div>
         </header>
 

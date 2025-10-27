@@ -8,7 +8,11 @@ interface ScenarioHeaderProps {
   onAnalysisYears: (years: number) => void;
 }
 
-export function ScenarioHeader({ scenario, onRename, onAnalysisYears }: ScenarioHeaderProps) {
+export function ScenarioHeader({
+  scenario,
+  onRename,
+  onAnalysisYears,
+}: ScenarioHeaderProps) {
   return (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
       <div className="flex items-center gap-2">
@@ -27,7 +31,9 @@ export function ScenarioHeader({ scenario, onRename, onAnalysisYears }: Scenario
             className="w-20 px-2 py-1 rounded-lg border border-neutral-300"
             min={1}
             value={scenario.analysisYears}
-            onChange={(e) => onAnalysisYears(parseInt(e.target.value || "1", 10))}
+            onChange={(e) =>
+              onAnalysisYears(parseInt(e.target.value || "1", 10))
+            }
           />
           <span>years</span>
         </div>

@@ -1,4 +1,8 @@
-export function monthlyPayment(principal: number, annualRate: number, nMonths: number): number {
+export function monthlyPayment(
+  principal: number,
+  annualRate: number,
+  nMonths: number,
+): number {
   const r = annualRate / 12;
   if (r === 0) return principal / nMonths;
   return (principal * r) / (1 - Math.pow(1 + r, -nMonths));

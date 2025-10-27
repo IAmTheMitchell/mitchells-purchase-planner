@@ -26,18 +26,31 @@ export interface VehicleCalculation {
   monthlyTotalNow: number;
 }
 
-export function calcVehicle(item: VehicleItem, analysisYears: number): VehicleCalculation {
+export function calcVehicle(
+  item: VehicleItem,
+  analysisYears: number,
+): VehicleCalculation {
   const taxableBase = Math.max(0, item.purchasePrice - item.tradeInValue);
   const salesTax = (item.salesTaxRate / 100) * taxableBase;
 
-  const upfront = item.oneTimeFees + (item.rollTaxIntoLoan ? 0 : salesTax) + item.downPaymentAmount;
+  const upfront =
+    item.oneTimeFees +
+    (item.rollTaxIntoLoan ? 0 : salesTax) +
+    item.downPaymentAmount;
 
   const amountFinanced = Math.max(
     0,
-    item.purchasePrice - item.downPaymentAmount - item.tradeInValue + (item.rollTaxIntoLoan ? salesTax : 0),
+    item.purchasePrice -
+      item.downPaymentAmount -
+      item.tradeInValue +
+      (item.rollTaxIntoLoan ? salesTax : 0),
   );
   const nMonths = item.termMonths;
-  const schedule = buildAmortization(amountFinanced, item.interestRateAPR / 100, nMonths);
+  const schedule = buildAmortization(
+    amountFinanced,
+    item.interestRateAPR / 100,
+    nMonths,
+  );
 
   const horizonMonths = Math.round(Math.min(nMonths, analysisYears * 12));
   let sumInterest = 0;
@@ -80,7 +93,8 @@ export function calcVehicle(item: VehicleItem, analysisYears: number): VehicleCa
       insurance,
       registration,
       maintenance,
-      totalOutlay: sumLoanPmts + insurance + registration + maintenance + upfront,
+      totalOutlay:
+        sumLoanPmts + insurance + registration + maintenance + upfront,
     },
     monthlyTotalNow,
   };

@@ -29,27 +29,43 @@ export interface PropertyCalculation {
   monthlyTotalNow: number;
 }
 
-export function calcProperty(item: PropertyItem, analysisYears: number): PropertyCalculation {
+export function calcProperty(
+  item: PropertyItem,
+  analysisYears: number,
+): PropertyCalculation {
   const loanAmount = Math.max(0, item.purchasePrice - item.downPaymentAmount);
   const nMonths = Math.round(item.termYears * 12);
-  const schedule = buildAmortization(loanAmount, item.interestRateAPR / 100, nMonths);
+  const schedule = buildAmortization(
+    loanAmount,
+    item.interestRateAPR / 100,
+    nMonths,
+  );
 
-  const pmiMonthlyRaw = (item.pmiAnnualRate / 100) * loanAmount / 12;
-  const initialLtv = item.purchasePrice > 0 ? loanAmount / item.purchasePrice : 0;
+  const pmiMonthlyRaw = ((item.pmiAnnualRate / 100) * loanAmount) / 12;
+  const initialLtv =
+    item.purchasePrice > 0 ? loanAmount / item.purchasePrice : 0;
   const hasPMI = pmiMonthlyRaw > 0 && initialLtv > item.pmiLTVCancel;
   const cancelMonth = hasPMI
-    ? schedule.find((row) => row.balance / item.purchasePrice <= item.pmiLTVCancel)?.month ?? nMonths
+    ? (schedule.find(
+        (row) => row.balance / item.purchasePrice <= item.pmiLTVCancel,
+      )?.month ?? nMonths)
     : 0;
 
-  const taxMonthly = (item.propertyTaxRate / 100) * item.purchasePrice / 12;
+  const taxMonthly = ((item.propertyTaxRate / 100) * item.purchasePrice) / 12;
   const insuranceMonthly = item.insuranceAnnual / 12;
   const hoaMonthly = item.hoaMonthly;
-  const maintenanceMonthly = (item.maintenancePctAnnual / 100) * item.purchasePrice / 12;
+  const maintenanceMonthly =
+    ((item.maintenancePctAnnual / 100) * item.purchasePrice) / 12;
 
   const closingPctAmount = (item.closingCostsPct / 100) * item.purchasePrice;
   const pointsAmount = (item.pointsPct / 100) * loanAmount;
   const originationAmount = (item.originationPct / 100) * loanAmount;
-  const upfront = closingPctAmount + item.closingCostsFixed + pointsAmount + originationAmount - item.lenderCredits;
+  const upfront =
+    closingPctAmount +
+    item.closingCostsFixed +
+    pointsAmount +
+    originationAmount -
+    item.lenderCredits;
 
   const horizonMonths = Math.min(nMonths, Math.round(analysisYears * 12));
   let sumInterest = 0;
@@ -82,7 +98,10 @@ export function calcProperty(item: PropertyItem, analysisYears: number): Propert
     maintenance: maintenanceMonthly,
   };
 
-  const horizonRecurring = (taxMonthly + insuranceMonthly + hoaMonthly + maintenanceMonthly) * horizonMonths + sumPMI;
+  const horizonRecurring =
+    (taxMonthly + insuranceMonthly + hoaMonthly + maintenanceMonthly) *
+      horizonMonths +
+    sumPMI;
 
   return {
     loanAmount,
@@ -96,7 +115,9 @@ export function calcProperty(item: PropertyItem, analysisYears: number): Propert
       interest: sumInterest,
       principal: sumPrincipal,
       mortgagePayments: sumMortgagePmt,
-      recurringNonMortgage: (taxMonthly + insuranceMonthly + hoaMonthly + maintenanceMonthly) * horizonMonths,
+      recurringNonMortgage:
+        (taxMonthly + insuranceMonthly + hoaMonthly + maintenanceMonthly) *
+        horizonMonths,
       pmi: sumPMI,
       totalOutlay: sumMortgagePmt + horizonRecurring + upfront,
     },

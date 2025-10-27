@@ -12,7 +12,9 @@ interface ComparePanelProps {
 }
 
 export function ComparePanel({ scenarios, selectedIds }: ComparePanelProps) {
-  const selected = scenarios.filter((scenario) => selectedIds.includes(scenario.id));
+  const selected = scenarios.filter((scenario) =>
+    selectedIds.includes(scenario.id),
+  );
 
   const rows = useMemo(() => {
     return selected.map((scenario) => {
@@ -48,7 +50,10 @@ export function ComparePanel({ scenarios, selectedIds }: ComparePanelProps) {
   if (selected.length === 0) return null;
 
   return (
-    <SectionCard title="Scenario comparison" icon={<BarChart3 className="w-4 h-4" />}>
+    <SectionCard
+      title="Scenario comparison"
+      icon={<BarChart3 className="w-4 h-4" />}
+    >
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>

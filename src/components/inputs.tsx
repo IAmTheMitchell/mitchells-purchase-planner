@@ -7,10 +7,19 @@ interface NumberInputProps {
   min?: number;
 }
 
-export function NumberInput({ label, value, onChange, step = 1, suffix, min = 0 }: NumberInputProps) {
+export function NumberInput({
+  label,
+  value,
+  onChange,
+  step = 1,
+  suffix,
+  min = 0,
+}: NumberInputProps) {
   return (
     <label className="flex items-center justify-between gap-4 py-1">
-      <span className="text-sm text-neutral-600 dark:text-neutral-300">{label}</span>
+      <span className="text-sm text-neutral-600 dark:text-neutral-300">
+        {label}
+      </span>
       <div className="flex items-center gap-2">
         <input
           type="number"
@@ -35,8 +44,14 @@ interface ToggleProps {
 export function Toggle({ label, checked, onChange }: ToggleProps) {
   return (
     <label className="flex items-center justify-between gap-4 py-1">
-      <span className="text-sm text-neutral-600 dark:text-neutral-300">{label}</span>
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <span className="text-sm text-neutral-600 dark:text-neutral-300">
+        {label}
+      </span>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+      />
     </label>
   );
 }
