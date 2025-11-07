@@ -16,14 +16,12 @@ export function NumberInput({
   min = 0,
 }: NumberInputProps) {
   return (
-    <label className="flex items-center justify-between gap-4 py-1">
-      <span className="text-sm text-neutral-600 dark:text-neutral-300">
-        {label}
-      </span>
-      <div className="flex items-center gap-2">
+    <label className="flex flex-col gap-2 py-1 text-sm">
+      <span className="text-neutral-600 dark:text-neutral-300">{label}</span>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         <input
           type="number"
-          className="w-36 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
+          className="w-full sm:w-40 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
           step={step}
           min={min}
           value={Number.isFinite(value) ? value : 0}
@@ -43,11 +41,10 @@ interface ToggleProps {
 
 export function Toggle({ label, checked, onChange }: ToggleProps) {
   return (
-    <label className="flex items-center justify-between gap-4 py-1">
-      <span className="text-sm text-neutral-600 dark:text-neutral-300">
-        {label}
-      </span>
+    <label className="flex flex-col gap-2 py-1 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <span className="text-neutral-600 dark:text-neutral-300">{label}</span>
       <input
+        className="h-4 w-4 self-start sm:self-auto"
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}

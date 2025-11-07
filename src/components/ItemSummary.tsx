@@ -35,22 +35,22 @@ export function ItemSummary({
 
   return (
     <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 p-4 bg-neutral-50 dark:bg-neutral-950">
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+        <div className="w-full">
           <div className="text-sm uppercase tracking-wide text-neutral-500">
             {item.type === "property" ? "Property" : "Vehicle"}
           </div>
           <div className="text-lg font-semibold">{item.name}</div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
           <button
-            className="p-2 rounded-lg border border-neutral-300 dark:border-neutral-700"
+            className="w-full sm:w-auto p-2 rounded-lg border border-neutral-300 dark:border-neutral-700 text-center"
             onClick={onEdit}
           >
             <Pencil className="w-4 h-4" />
           </button>
           <button
-            className="p-2 rounded-lg border border-red-300 text-red-600"
+            className="w-full sm:w-auto p-2 rounded-lg border border-red-300 text-red-600 text-center"
             onClick={onDelete}
           >
             <Trash2 className="w-4 h-4" />

@@ -30,6 +30,8 @@ import { ItemType, PropertyItem, Scenario, VehicleItem } from "./types";
 export default function App() {
   const isBrowser = typeof window !== "undefined";
   const initialScenariosRef = useRef<Scenario[] | null>(null);
+  const actionButtonClass =
+    "w-full sm:w-auto px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-sm font-medium text-center transition hover:bg-neutral-50 dark:hover:bg-neutral-800";
 
   if (initialScenariosRef.current === null) {
     initialScenariosRef.current = isBrowser ? loadScenarios() : [newScenario()];
@@ -39,7 +41,7 @@ export default function App() {
 
   const [scenarios, setScenarios] = useState<Scenario[]>(initialScenarios);
   const [currentId, setCurrentId] = useState<string>(
-    initialScenarios[0]?.id ?? "",
+    initialScenarios[0]?.id ?? ""
   );
   const [editingItem, setEditingItem] = useState<
     PropertyItem | VehicleItem | null
@@ -54,7 +56,7 @@ export default function App() {
       setScenarios(loaded);
       setCurrentId(loaded[0]?.id ?? "");
       setCompareIds((prev) =>
-        prev.filter((id) => loaded.some((scenario) => scenario.id === id)),
+        prev.filter((id) => loaded.some((scenario) => scenario.id === id))
       );
       setHydrated(true);
       return;
@@ -66,7 +68,7 @@ export default function App() {
   const current = useMemo(
     () =>
       scenarios.find((scenario) => scenario.id === currentId) ?? scenarios[0],
-    [scenarios, currentId],
+    [scenarios, currentId]
   );
 
   useEffect(() => {
@@ -79,8 +81,8 @@ export default function App() {
     if (!current) return;
     setScenarios((prev) =>
       prev.map((scenario) =>
-        scenario.id === current.id ? updater({ ...scenario }) : scenario,
-      ),
+        scenario.id === current.id ? updater({ ...scenario }) : scenario
+      )
     );
   }
 
@@ -157,7 +159,7 @@ export default function App() {
       setScenarios(imported);
       setCurrentId(imported[0].id);
       setCompareIds((prev) =>
-        prev.filter((id) => imported.some((scenario) => scenario.id === id)),
+        prev.filter((id) => imported.some((scenario) => scenario.id === id))
       );
     } catch (error) {
       if (isBrowser) {
@@ -177,7 +179,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100 dark:from-neutral-950 dark:to-neutral-900 text-neutral-900 dark:text-neutral-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
+        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
           <div className="flex items-center gap-3">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -197,9 +199,9 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap md:justify-end w-full md:w-auto">
             <button
-              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
+              className={actionButtonClass}
               onClick={() => {
                 const scenario = newScenario();
                 setScenarios((prev) => [...prev, scenario]);
@@ -209,25 +211,22 @@ export default function App() {
               <FilePlus2 className="inline w-4 h-4 mr-1" /> New scenario
             </button>
             <button
-              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
+              className={actionButtonClass}
               onClick={() => duplicateScenario(current.id)}
             >
               <Copy className="inline w-4 h-4 mr-1" /> Duplicate
             </button>
-            <button
-              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
-              onClick={handleExport}
-            >
+            <button className={actionButtonClass} onClick={handleExport}>
               <Download className="inline w-4 h-4 mr-1" /> Export all
             </button>
             <button
-              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
+              className={actionButtonClass}
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="inline w-4 h-4 mr-1" /> Import
             </button>
             <button
-              className="px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-red-600"
+              className={`${actionButtonClass} border-red-300 dark:border-red-800 text-red-600`}
               onClick={() => removeScenario(current.id)}
             >
               <Trash2 className="inline w-4 h-4 mr-1" /> Delete
@@ -246,10 +245,10 @@ export default function App() {
 
         <SectionCard title="Scenarios" icon={<Layers className="w-4 h-4" />}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <span className="text-sm text-neutral-600">Current:</span>
               <select
-                className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
+                className="w-full sm:flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
                 value={current.id}
                 onChange={(e) => setCurrentId(e.target.value)}
               >
@@ -260,18 +259,18 @@ export default function App() {
                 ))}
               </select>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <span className="text-sm text-neutral-600">Compare:</span>
               <select
-                className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
+                className="w-full sm:flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
                 multiple
                 value={compareIds}
                 onChange={(e) =>
                   setCompareIds(
                     Array.from(
                       e.target.selectedOptions,
-                      (option) => option.value,
-                    ),
+                      (option) => option.value
+                    )
                   )
                 }
               >
@@ -305,15 +304,15 @@ export default function App() {
           />
 
           <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <button
-                className="px-3 py-2 rounded-xl bg-black text-white"
+                className="w-full sm:w-auto px-3 py-2 rounded-xl bg-black text-white text-center"
                 onClick={() => addItem("property")}
               >
                 <Plus className="inline w-4 h-4 mr-1" /> Add property
               </button>
               <button
-                className="px-3 py-2 rounded-xl bg-black text-white"
+                className="w-full sm:w-auto px-3 py-2 rounded-xl bg-black text-white text-center"
                 onClick={() => addItem("vehicle")}
               >
                 <Plus className="inline w-4 h-4 mr-1" /> Add vehicle
@@ -337,7 +336,7 @@ export default function App() {
                     updateCurrent((scenario) => ({
                       ...scenario,
                       items: scenario.items.filter(
-                        (existing) => existing.id !== item.id,
+                        (existing) => existing.id !== item.id
                       ),
                     }))
                   }
@@ -361,6 +360,23 @@ export default function App() {
             and maintenance. Upfront totals include down payment, fees, and tax
             if not rolled into the loan.
           </p>
+          <p className="mt-3">
+            Disclaimer: These calculations are illustrative only and do not
+            constitute financial advice. Verify assumptions with licensed
+            professionals before making purchase decisions.
+          </p>
+          <p className="mt-3">
+            Have ideas or found issues? Visit the{" "}
+            <a
+              className="underline text-neutral-700 dark:text-neutral-300"
+              href="https://github.com/IAmTheMitchell/mitchells-purchase-planner"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub project
+            </a>{" "}
+            to share feedback.
+          </p>
         </footer>
       </div>
 
@@ -372,7 +388,7 @@ export default function App() {
               updateCurrent((scenario) => ({
                 ...scenario,
                 items: scenario.items.map((existing) =>
-                  existing.id === updated.id ? updated : existing,
+                  existing.id === updated.id ? updated : existing
                 ),
               }));
               setEditingItem(null);
