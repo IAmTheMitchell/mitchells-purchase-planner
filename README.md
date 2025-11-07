@@ -2,6 +2,8 @@
 
 Interactive finance sandbox for comparing long-term housing and vehicle purchases. Model monthly costs, upfront fees, and multi-year outlays across saved scenarios directly in a modular React UI.
 
+Visit [purchase-planner.com](https://purchase-planner.com) to test it out!
+
 ## Getting Started
 
 ```bash
