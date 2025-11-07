@@ -41,7 +41,7 @@ export default function App() {
 
   const [scenarios, setScenarios] = useState<Scenario[]>(initialScenarios);
   const [currentId, setCurrentId] = useState<string>(
-    initialScenarios[0]?.id ?? "",
+    initialScenarios[0]?.id ?? ""
   );
   const [editingItem, setEditingItem] = useState<
     PropertyItem | VehicleItem | null
@@ -56,7 +56,7 @@ export default function App() {
       setScenarios(loaded);
       setCurrentId(loaded[0]?.id ?? "");
       setCompareIds((prev) =>
-        prev.filter((id) => loaded.some((scenario) => scenario.id === id)),
+        prev.filter((id) => loaded.some((scenario) => scenario.id === id))
       );
       setHydrated(true);
       return;
@@ -68,7 +68,7 @@ export default function App() {
   const current = useMemo(
     () =>
       scenarios.find((scenario) => scenario.id === currentId) ?? scenarios[0],
-    [scenarios, currentId],
+    [scenarios, currentId]
   );
 
   useEffect(() => {
@@ -81,8 +81,8 @@ export default function App() {
     if (!current) return;
     setScenarios((prev) =>
       prev.map((scenario) =>
-        scenario.id === current.id ? updater({ ...scenario }) : scenario,
-      ),
+        scenario.id === current.id ? updater({ ...scenario }) : scenario
+      )
     );
   }
 
@@ -159,7 +159,7 @@ export default function App() {
       setScenarios(imported);
       setCurrentId(imported[0].id);
       setCompareIds((prev) =>
-        prev.filter((id) => imported.some((scenario) => scenario.id === id)),
+        prev.filter((id) => imported.some((scenario) => scenario.id === id))
       );
     } catch (error) {
       if (isBrowser) {
@@ -216,10 +216,7 @@ export default function App() {
             >
               <Copy className="inline w-4 h-4 mr-1" /> Duplicate
             </button>
-            <button
-              className={actionButtonClass}
-              onClick={handleExport}
-            >
+            <button className={actionButtonClass} onClick={handleExport}>
               <Download className="inline w-4 h-4 mr-1" /> Export all
             </button>
             <button
@@ -272,8 +269,8 @@ export default function App() {
                   setCompareIds(
                     Array.from(
                       e.target.selectedOptions,
-                      (option) => option.value,
-                    ),
+                      (option) => option.value
+                    )
                   )
                 }
               >
@@ -339,7 +336,7 @@ export default function App() {
                     updateCurrent((scenario) => ({
                       ...scenario,
                       items: scenario.items.filter(
-                        (existing) => existing.id !== item.id,
+                        (existing) => existing.id !== item.id
                       ),
                     }))
                   }
@@ -368,6 +365,18 @@ export default function App() {
             constitute financial advice. Verify assumptions with licensed
             professionals before making purchase decisions.
           </p>
+          <p className="mt-3">
+            Have ideas or found issues? Visit the{" "}
+            <a
+              className="underline text-neutral-700 dark:text-neutral-300"
+              href="https://github.com/IAmTheMitchell/mitchells-purchase-planner"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub project
+            </a>{" "}
+            to share feedback.
+          </p>
         </footer>
       </div>
 
@@ -379,7 +388,7 @@ export default function App() {
               updateCurrent((scenario) => ({
                 ...scenario,
                 items: scenario.items.map((existing) =>
-                  existing.id === updated.id ? updated : existing,
+                  existing.id === updated.id ? updated : existing
                 ),
               }));
               setEditingItem(null);
