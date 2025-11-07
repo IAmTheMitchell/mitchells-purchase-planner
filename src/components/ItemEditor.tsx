@@ -15,8 +15,8 @@ export function ItemEditor({ item, onSave, onClose }: ItemEditorProps) {
   const isProperty = draft.type === "property";
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-neutral-950 w-full max-w-3xl rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-800">
+    <div className="fixed inset-0 bg-black/40 flex items-start md:items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white dark:bg-neutral-950 w-full max-w-3xl mx-auto rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800">
           <div className="flex items-center gap-2">
             <Calculator className="w-5 h-5" />
@@ -29,7 +29,7 @@ export function ItemEditor({ item, onSave, onClose }: ItemEditorProps) {
             <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto">
+        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6 max-h-full md:max-h-[70vh] overflow-y-auto">
           <label className="flex flex-col gap-1">
             <span className="text-sm text-neutral-600 dark:text-neutral-300">
               Name
@@ -284,15 +284,15 @@ export function ItemEditor({ item, onSave, onClose }: ItemEditorProps) {
             </>
           )}
         </div>
-        <div className="flex items-center justify-end gap-2 p-4 border-t border-neutral-200 dark:border-neutral-800">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 p-4 border-t border-neutral-200 dark:border-neutral-800">
           <button
-            className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700"
+            className="w-full sm:w-auto px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 text-center"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="px-3 py-2 rounded-lg bg-black text-white"
+            className="w-full sm:w-auto px-3 py-2 rounded-lg bg-black text-white text-center"
             onClick={() => onSave(draft)}
           >
             Save
