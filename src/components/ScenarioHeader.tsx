@@ -25,10 +25,12 @@ export function ScenarioHeader({
       </div>
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-neutral-600">Analysis horizon:</span>
+          <span className="text-neutral-600 dark:text-neutral-300">
+            Analysis horizon:
+          </span>
           <input
             type="number"
-            className="w-20 px-2 py-1 rounded-lg border border-neutral-300"
+            className="w-20 px-2 py-1 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950"
             min={1}
             value={scenario.analysisYears}
             onChange={(e) =>
