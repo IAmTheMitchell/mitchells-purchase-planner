@@ -88,10 +88,6 @@ export default function App() {
 
   function addItem(type: ItemType) {
     const item = type === "property" ? newProperty() : newVehicle();
-    updateCurrent((scenario) => ({
-      ...scenario,
-      items: [...scenario.items, item],
-    }));
     setEditingItem(item);
   }
 
@@ -385,12 +381,19 @@ export default function App() {
           <ItemEditor
             item={editingItem}
             onSave={(updated) => {
-              updateCurrent((scenario) => ({
-                ...scenario,
-                items: scenario.items.map((existing) =>
-                  existing.id === updated.id ? updated : existing
-                ),
-              }));
+              updateCurrent((scenario) => {
+                const exists = scenario.items.some(
+                  (existing) => existing.id === updated.id
+                );
+                return {
+                  ...scenario,
+                  items: exists
+                    ? scenario.items.map((existing) =>
+                        existing.id === updated.id ? updated : existing
+                      )
+                    : [...scenario.items, updated],
+                };
+              });
               setEditingItem(null);
             }}
             onClose={() => setEditingItem(null)}
